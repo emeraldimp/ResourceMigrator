@@ -7,6 +7,10 @@ namespace ResourceMigrator
 {
     public static class FileHandler
     {
+        private static readonly string _iosUniqueIdentifier = "iOS";
+        private static readonly string _androidUniqueIdentifier = "Droid";
+        private static readonly string _pclUniqueIdentifier = "Portable";
+
         public static IList<ProjectModel> GetProjects(SolutionParser solution, string solutionPath)
         {
             var projects = new List<ProjectModel>();
@@ -35,15 +39,15 @@ namespace ResourceMigrator
                     var attrVal = xmlAttributeCollection["Project"].Value;
                     var projectPath = Path.Combine(solutionPath, proj.RelativePath).Replace(proj.ProjectName + ".csproj", "");
 
-                    if (attrVal.Contains("iOS"))
+                    if (attrVal.Contains(_iosUniqueIdentifier))
                     {
                         projects.Add(new ProjectModel {ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Touch});
                     }
-                    else if (attrVal.Contains("Droid"))
+                    else if (attrVal.Contains(_androidUniqueIdentifier))
                     {
                         projects.Add(new ProjectModel {ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Droid});
                     }
-                    else if (attrVal.Contains("Portable"))
+                    else if (attrVal.Contains(_pclUniqueIdentifier))
                     {
                         projects.Add(new ProjectModel {ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Pcl});
                     }
