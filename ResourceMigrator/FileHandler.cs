@@ -35,11 +35,11 @@ namespace ResourceMigrator
                     var attrVal = xmlAttributeCollection["Project"].Value;
                     var projectPath = Path.Combine(solutionPath, proj.RelativePath).Replace(proj.ProjectName + ".csproj", "");
 
-                    if (attrVal.Contains("MonoTouch"))
+                    if (attrVal.Contains("iOS"))
                     {
                         projects.Add(new ProjectModel {ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Touch});
                     }
-                    else if (attrVal.Contains("Android"))
+                    else if (attrVal.Contains("Droid"))
                     {
                         projects.Add(new ProjectModel {ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Droid});
                     }
