@@ -1,14 +1,13 @@
-Cross platform way to migrate PCL Resources over to Android and iOS. I built this simply to help me keep all my Resources in one spot while building Xamarin projects.
+##Overview
+Cross platform way to migrate PCL Resources over to Android and iOS. Mapleton Hill provides no guarantee of further development of this code. Be aware that this project is still under development. 
 
------
-
-Put all of your resources in `*.resx` files in your Portable Class Libraries (PCL's), and run this with your build.  
-
-It will automatically 
-generate your `*.xml` resource file for Android, and a `CustomUIColor.cs` class for iOS (more iOS 
+This project will automatically generate `*.xml` resource files for Android, and a `CustomUIColor.cs` class for iOS (more iOS 
 support to come).
 
-*note: if you start your file name with the type of resource you're generating, it will generate the appropriate resource for Android automatically*
+##Recommended Usage
+Put all of your resources in `*.resx` files in your Portable Class Libraries (PCL's)
+
+ *note: if you start your file name with the type of resource you're generating, it will generate the appropriate resource for Android automatically*
 
 example:
  
@@ -20,9 +19,16 @@ example:
     strings.resx     // will generate string resources
     foo-bar.resx     // will ALSO generate string resources
 
+
 usage:
 
     ResourceMigrator.exe /path/to/solution
+
+An easy way to integrate this tool with your project is to place the exe in your solution's root, add a prebuild configuration that looks like: 
+
+    $(SolutionDir)ResourceMigrator.exe $(SolutionDir)
+
+to your iOS and Android projects. 
 
 todo:
 
