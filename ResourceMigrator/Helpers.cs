@@ -2,11 +2,11 @@
 
 namespace ResourceMigrator
 {
-    public class Helpers
-    {
-        public static string GetAssemblyVersion()
-        {
-            return Assembly.GetAssembly(typeof (Program)).GetName().Version.ToString();
-        }
-    }
+	public class Helpers
+	{
+		public static string GetAssemblyVersion()
+		{
+			return Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString();
+		}
+	}
 }

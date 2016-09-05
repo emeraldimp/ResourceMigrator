@@ -5,66 +5,66 @@ using System.Xml;
 
 namespace ResourceMigrator
 {
-    public static class FileHandler
-    {
-        private static readonly string _iosUniqueIdentifier = "iOS";
-        private static readonly string _androidUniqueIdentifier = "Droid";
-        private static readonly string _pclUniqueIdentifier = "Portable";
+	public static class FileHandler
+	{
+		private static readonly string _iosUniqueIdentifier = "iOS";
+		private static readonly string _androidUniqueIdentifier = "Droid";
+		private static readonly string _pclUniqueIdentifier = "Portable";
 
-        public static IList<ProjectModel> GetProjects(SolutionParser solution, string solutionPath)
-        {
-            var projects = new List<ProjectModel>();
+		public static IList<ProjectModel> GetProjects(SolutionParser solution, string solutionPath)
+		{
+            // Our return list of projects
+			var projects = new List<ProjectModel>();
 
-            foreach (var proj in solution.Projects)
-            {
-                var xmldoc = new XmlDocument();
-                try
-                {
-                    xmldoc.Load(Path.Combine(solutionPath, proj.RelativePath));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+            // Iterate through the solution's list of projects looking for iOS/PCL/Android projects
+			foreach (var proj in solution.Projects)
+			{
+				var xmldoc = new XmlDocument();
+				try
+				{
+					xmldoc.Load(Path.Combine(solutionPath, proj.RelativePath));
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+				}
 
-                var mgr = new XmlNamespaceManager(xmldoc.NameTable);
-                mgr.AddNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003");
+				var mgr = new XmlNamespaceManager(xmldoc.NameTable);
+				mgr.AddNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003");
 
-                var elemList = xmldoc.GetElementsByTagName("Import");
-                for (var i = 0; i < elemList.Count; i++)
-                {
-                    var xmlAttributeCollection = elemList[i].Attributes;
-                    if (xmlAttributeCollection == null) continue;
+				var elemList = xmldoc.GetElementsByTagName("Import");
+				for (var i = 0; i < elemList.Count; i++)
+				{
+					var xmlAttributeCollection = elemList[i].Attributes;
+					if (xmlAttributeCollection == null) continue;
 
-                    var attrVal = xmlAttributeCollection["Project"].Value;
-                    var projectPath = Path.Combine(solutionPath, proj.RelativePath).Replace(proj.ProjectName + ".csproj", "");
+					var attrVal = xmlAttributeCollection["Project"].Value;
+					var projectPath = Path.Combine(solutionPath, proj.RelativePath).Replace(proj.ProjectName + ".csproj", "");
 
-                    if (attrVal.Contains(_iosUniqueIdentifier))
-                    {
-                        projects.Add(new ProjectModel {ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Touch});
-                    }
-                    else if (attrVal.Contains(_androidUniqueIdentifier))
-                    {
-                        projects.Add(new ProjectModel {ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Droid});
-                    }
-                    else if (attrVal.Contains(_pclUniqueIdentifier))
-                    {
-                        projects.Add(new ProjectModel {ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Pcl});
-                    }
-                }
-            }
-            return projects;
-        }
+					if (attrVal.Contains(_iosUniqueIdentifier))
+					{
+						projects.Add(new ProjectModel { ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Ios });
+					} else if (attrVal.Contains(_androidUniqueIdentifier))
+					{
+						projects.Add(new ProjectModel { ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Droid });
+					} else if (attrVal.Contains(_pclUniqueIdentifier))
+					{
+						projects.Add(new ProjectModel { ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Pcl });
+					}
+				}
+			}
+			return projects;
+		}
 
-        public static IEnumerable<string> GetAllResourceFiles(string solutionPath)
-        {
-            return Directory.GetFiles(solutionPath, "*.resx", SearchOption.AllDirectories);
-        }
+		public static IEnumerable<string> GetAllResourceFiles(string solutionPath)
+		{
+			return Directory.GetFiles(solutionPath, "*.resx", SearchOption.AllDirectories);
+		}
 
-        public static SolutionParser GetSolutionFromPath(string solutionPath)
-        {
-            var files = Directory.GetFiles(solutionPath, "*.sln");
-            return new SolutionParser(files[0]);
-        }
-    }
+		public static SolutionParser GetSolutionFromPath(string solutionPath)
+		{
+			var files = Directory.GetFiles(solutionPath, "*.sln");
+			return new SolutionParser(files[0]);
+		}
+	}
 }

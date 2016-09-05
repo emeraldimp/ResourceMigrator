@@ -6,47 +6,55 @@ using System.Linq;
 
 namespace ResourceMigrator
 {
-    internal class Program
-    {
-        private static void Main(string[] args)
-        {
-            var solutionPath = args[0];
+	internal class Program
+	{
+		private static void Main(string[] args)
+		{
+            // Get the solution path from the execution arguments
+            //var solutionPath = args[0];
 
+            var solutionPath = "F:\\Projects\\appSamples\\ResourceCompilerTest";
+
+            // Load the projects from the solution
             var solution = FileHandler.GetSolutionFromPath(solutionPath);
-            var projects = FileHandler.GetProjects(solution, solutionPath);
+			var projects = FileHandler.GetProjects(solution, solutionPath);
 
-            var pcl = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Pcl);
-            if (pcl == null) throw new Exception("Your resource files must be located in a PCL.");
+			// Look for a PCL to pull resx files from 
+			var pcl = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Pcl);
+			if (pcl == null) throw new Exception("Your resource files must be located in a PCL -- no PCL found.");
 
-            var phone = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Phone);
-            var touch = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Touch);
-            var droid = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Droid);
+			// Find the platform-specific projects 
+			var windows = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Windows);
+			var ios = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Ios);
+			var droid = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Droid);
 
-            var resourceFiles = FileHandler.GetAllResourceFiles(pcl.ProjectPath);
+			// Grab the PCL's resx files 
+			var resourceFiles = FileHandler.GetAllResourceFiles(pcl.ProjectPath);
 
-            foreach (var file in resourceFiles)
-            {
-                var fileInfo = new FileInfo(file);
-                var resources = fileInfo.LoadResources();
+			// For each resx file, translate the contents into native representations
+			foreach (var file in resourceFiles)
+			{
+				var fileInfo = new FileInfo(file);
+				var resources = fileInfo.LoadResources();
 
-                // create the Android resources
-                if (droid != null)
-                {
-                    new Droid().WriteToTarget(droid, resources, fileInfo);
-                }
+				// Create the Android resources
+				if (droid != null)
+				{
+					new Droid().WriteToTarget(droid, resources, fileInfo);
+				}
 
-                // create the iOS resources
-                if (touch != null)
-                {
-                    new Touch().WriteToTarget(touch, resources, fileInfo);
-                }
+				// Create the iOS resources
+				if (ios != null)
+				{
+					new Touch().WriteToTarget(ios, resources, fileInfo);
+				}
 
-                // create the Windows Phone resources
-                if (phone != null)
-                {
-                    // new Phone().WriteToTarget(phone, resources, fileInfo);
-                }
-            }
-        }
-    }
+				// Create the Windows Phone resources
+				if (windows != null)
+				{
+					 //new Phone().WriteToTarget(phone, resources, fileInfo);
+				}
+			}
+		}
+	}
 }
