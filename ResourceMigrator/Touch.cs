@@ -28,11 +28,11 @@ namespace ResourceMigrator
                     break;
 
                 case "bool":
-
+                    BuildBoolResourceForTouch();
                     break;
 
                 case "dimen":
-
+                    BuildIntegerResourceForTouch();
                     break;
 
                 case "item":
@@ -40,7 +40,7 @@ namespace ResourceMigrator
                     break;
 
                 case "integer":
-
+                    BuildIntegerResourceForTouch();
                     break;
 
                 default:    // String
@@ -79,6 +79,41 @@ namespace ResourceMigrator
 
             Directory.CreateDirectory(_targetDir);
             File.WriteAllText(Path.Combine(_targetDir, fileName), builder.ToString());
+        }
+
+
+
+
+
+        private void BuildBoolResourceForTouch()
+        {
+            const string integerPropertyDefinition = "public static readonly bool {0} = {1};";
+
+            var builder = new StringBuilder();
+
+            foreach (var key in _strings.Keys)
+            {
+                builder.AppendLine(string.Format(integerPropertyDefinition, key, _strings[key].ToLower()));
+            }
+
+            var inputFileName = Path.GetFileNameWithoutExtension(_sourceFile.Name);
+            File.WriteAllText(Path.Combine(_targetDir, "Bools.cs"), GenerateStaticClass(_touchNameSpace, "Bools", builder.ToString()));
+        }
+
+
+        private void BuildIntegerResourceForTouch()
+        {
+            const string integerPropertyDefinition = "public static readonly int {0} = {1};";
+
+            var builder = new StringBuilder();
+
+            foreach (var key in _strings.Keys)
+            {
+                builder.AppendLine(string.Format(integerPropertyDefinition, key, _strings[key]));
+            }
+
+            var inputFileName = Path.GetFileNameWithoutExtension(_sourceFile.Name);
+            File.WriteAllText(Path.Combine(_targetDir, "Integers.cs"), GenerateStaticClass(_touchNameSpace, "Integers", builder.ToString()));
         }
 
 
