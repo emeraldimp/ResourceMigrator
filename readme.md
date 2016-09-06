@@ -32,7 +32,6 @@ An easy way to integrate this tool with your VisualStudio project is to place th
 ##Issues
  - Doesn't automatically update csproj to include new resources
  - No iOS "items" support -- not sure what this would look like
- - Doesn't handle multiple Android/iOS projects
  - Doesn't handle multiple resources from different PCLs under the same name (PCL_1.bools isn't combined with PCL_2.bools) 
  - iOS localized strings require more setup than simply creating the files in directories -- and this is not automated. 
 
