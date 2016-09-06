@@ -45,10 +45,12 @@ namespace ResourceMigrator
 					if (attrVal.Contains(_iosUniqueIdentifier))
 					{
 						projects.Add(new ProjectModel { ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Ios });
-					} else if (attrVal.Contains(_androidUniqueIdentifier))
+					}
+                    else if (attrVal.Contains(_androidUniqueIdentifier))
 					{
 						projects.Add(new ProjectModel { ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Droid });
-					} else if (attrVal.Contains(_pclUniqueIdentifier))
+					}
+                    else if (attrVal.Contains(_pclUniqueIdentifier))
 					{
 						projects.Add(new ProjectModel { ProjectNamespace = proj.ProjectName, ProjectPath = projectPath, PlatformType = PlatformType.Pcl });
 					}

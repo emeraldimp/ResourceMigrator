@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 
 // originally taken from http://stackoverflow.com/a/16987412/124069
 
 namespace ResourceMigrator
 {
-	internal class Program
+	public class Program
 	{
 		private static void Main(string[] args)
 		{
@@ -22,9 +24,9 @@ namespace ResourceMigrator
 			if (pcl == null) throw new Exception("Your resource files must be located in a PCL -- no PCL found.");
 
 			// Find the platform-specific projects 
-			var windows = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Windows);
-			var ios = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Ios);
-			var droid = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Droid);
+			var windows = projects.Where(p => p.PlatformType == PlatformType.Windows).ToList();
+		    var ios = projects.Where(p => p.PlatformType == PlatformType.Ios).ToList();
+			var droid = projects.Where(p => p.PlatformType == PlatformType.Droid).ToList();
 
 			// Grab the PCL's resx files 
 			var resourceFiles = FileHandler.GetAllResourceFiles(pcl.ProjectPath);
@@ -36,19 +38,25 @@ namespace ResourceMigrator
 				var resources = fileInfo.LoadResources();
 
 				// Create the Android resources
-				if (droid != null)
+				if (droid.Count > 0)
 				{
-					new Droid().WriteToTarget(droid, resources, fileInfo);
+				    foreach (var proj in droid)
+				    {
+                        new Droid().WriteToTarget(proj, resources, fileInfo);
+				    }
 				}
 
 				// Create the iOS resources
-				if (ios != null)
+				if (ios.Count > 0)
 				{
-					new Touch().WriteToTarget(ios, resources, fileInfo);
+				    foreach (var proj in ios)
+				    {
+                        new Touch().WriteToTarget(proj, resources, fileInfo);
+				    }
 				}
 
 				// Create the Windows Phone resources
-				if (windows != null)
+				if (windows.Count > 0)
 				{
 					 //new Phone().WriteToTarget(phone, resources, fileInfo);
 				}
