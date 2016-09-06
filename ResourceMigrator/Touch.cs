@@ -123,12 +123,12 @@ namespace ResourceMigrator
             
 			foreach (var key in _strings.Keys)
 			{
-				builder.AppendLine(string.Format("public static MonoTouch.UIKit.UIColor {0} = FromHexString(\"{1}\");", key, _strings[key].ToEscapedString()));
+				builder.AppendLine(string.Format("public static UIKit.UIColor {0} = FromHexString(\"{1}\");", key, _strings[key].ToEscapedString()));
 			}
 
 			builder.Append(@"
 
-private static MonoTouch.UIKit.UIColor FromHexString(string hexValue)
+private static UIKit.UIColor FromHexString(string hexValue)
 {
     var colorString = hexValue.Replace(""#"", """");
     float red, green, blue;
@@ -139,20 +139,20 @@ private static MonoTouch.UIKit.UIColor FromHexString(string hexValue)
                 red = Convert.ToInt32(string.Format(""{0}{0}"", colorString.Substring(0, 1)), 16) / 255f;
                 green = Convert.ToInt32(string.Format(""{0}{0}"", colorString.Substring(1, 1)), 16) / 255f;
                 blue = Convert.ToInt32(string.Format(""{0}{0}"", colorString.Substring(2, 1)), 16) / 255f;
-                return MonoTouch.UIKit.UIColor.FromRGB(red, green, blue);
+                return UIKit.UIColor.FromRGB(red, green, blue);
             
         case 6: // #RRGGBB
                 red = Convert.ToInt32(colorString.Substring(0, 2), 16) / 255f;
                 green = Convert.ToInt32(colorString.Substring(2, 2), 16) / 255f;
                 blue = Convert.ToInt32(colorString.Substring(4, 2), 16) / 255f;
-                return MonoTouch.UIKit.UIColor.FromRGB(red, green, blue);
+                return UIKit.UIColor.FromRGB(red, green, blue);
             
         case 8: // #AARRGGBB
                 var alpha = Convert.ToInt32(colorString.Substring(0, 2), 16)/255f;
                 red = Convert.ToInt32(colorString.Substring(2, 2), 16)/255f;
                 green = Convert.ToInt32(colorString.Substring(4, 2), 16) / 255f;
                 blue = Convert.ToInt32(colorString.Substring(6, 2), 16) / 255f;
-                return MonoTouch.UIKit.UIColor.FromRGBA(red, green, blue, alpha);
+                return UIKit.UIColor.FromRGBA(red, green, blue, alpha);
             
         default:
             throw new ArgumentOutOfRangeException(string.Format(""Invalid color value {0} is invalid. It should be a hex value of the form #RBG, #RRGGBB, or #AARRGGBB"", hexValue));
