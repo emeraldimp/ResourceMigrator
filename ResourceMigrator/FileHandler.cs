@@ -11,6 +11,7 @@ namespace ResourceMigrator
 		private static readonly string _androidUniqueIdentifier = "Droid";
 		private static readonly string _pclUniqueIdentifier = "Portable";
 
+
 		public static IList<ProjectModel> GetProjects(SolutionParser solution, string solutionPath)
 		{
             // Our return list of projects
@@ -56,15 +57,32 @@ namespace ResourceMigrator
 			return projects;
 		}
 
+
 		public static IEnumerable<string> GetAllResourceFiles(string solutionPath)
 		{
 			return Directory.GetFiles(solutionPath, "*.resx", SearchOption.AllDirectories);
 		}
+
 
 		public static SolutionParser GetSolutionFromPath(string solutionPath)
 		{
 			var files = Directory.GetFiles(solutionPath, "*.sln");
 			return new SolutionParser(files[0]);
 		}
+
+
+        /// <summary>
+        /// Writes a string to a file while also creating the directory structure to house the file
+        /// if any directories don't exist. 
+        /// </summary>
+        /// <param name="path">The path to the directory that will contain the file</param>
+        /// <param name="fileName">The file's name</param>
+        /// <param name="content">The content to write to the file</param>
+	    public static void WriteToFile(string path, string fileName, string content)
+	    {
+	        Directory.CreateDirectory(path);
+
+	        File.WriteAllText(Path.Combine(path, fileName), content);
+	    }
 	}
 }

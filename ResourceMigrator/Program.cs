@@ -11,9 +11,7 @@ namespace ResourceMigrator
 		private static void Main(string[] args)
 		{
             // Get the solution path from the execution arguments
-            //var solutionPath = args[0];
-
-            var solutionPath = "F:\\Projects\\appSamples\\ResourceCompilerTest";
+            var solutionPath = args[0];
 
             // Load the projects from the solution
             var solution = FileHandler.GetSolutionFromPath(solutionPath);

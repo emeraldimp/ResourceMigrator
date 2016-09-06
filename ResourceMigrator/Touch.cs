@@ -36,7 +36,7 @@ namespace ResourceMigrator
                     break;
 
                 case "item":
-
+                    // What would this look like??? (item resources define menus in Android) 
                     break;
 
                 case "integer":
@@ -50,11 +50,15 @@ namespace ResourceMigrator
 		}
 
 
+        /// <summary>
+        /// Creates *.strings files in the appropriate directories under '/resources'. 
+        /// Maps strings.resx to Base.lproj
+        /// </summary>
         private void BuildStringResourceForTouch()
         {
             const string directorySuffix = ".lproj";
             const string fileName = "Localizable.strings";
-            const string stringDefinition = "\"{0}\" = \"{1}\"";
+            const string stringDefinition = "\"{0}\" = \"{1}\";";
 
             // A string builder to hold the file contents
             var builder = new StringBuilder();
@@ -77,12 +81,8 @@ namespace ResourceMigrator
             var outputDirectoryName = inputFileName.Equals("strings") ? "Base" : inputFileName;
             _targetDir = Path.Combine(_targetDir, outputDirectoryName + directorySuffix);
 
-            Directory.CreateDirectory(_targetDir);
-            File.WriteAllText(Path.Combine(_targetDir, fileName), builder.ToString());
+            FileHandler.WriteToFile(_targetDir, fileName, builder.ToString());
         }
-
-
-
 
 
         private void BuildBoolResourceForTouch()
@@ -96,8 +96,8 @@ namespace ResourceMigrator
                 builder.AppendLine(string.Format(integerPropertyDefinition, key, _strings[key].ToLower()));
             }
 
-            var inputFileName = Path.GetFileNameWithoutExtension(_sourceFile.Name);
-            File.WriteAllText(Path.Combine(_targetDir, "Bools.cs"), GenerateStaticClass(_touchNameSpace, "Bools", builder.ToString()));
+            var content = GenerateStaticClass(_touchNameSpace, "Bools", builder.ToString());
+            FileHandler.WriteToFile(_targetDir, "Bools.cs", content);
         }
 
 
@@ -112,8 +112,8 @@ namespace ResourceMigrator
                 builder.AppendLine(string.Format(integerPropertyDefinition, key, _strings[key]));
             }
 
-            var inputFileName = Path.GetFileNameWithoutExtension(_sourceFile.Name);
-            File.WriteAllText(Path.Combine(_targetDir, "Integers.cs"), GenerateStaticClass(_touchNameSpace, "Integers", builder.ToString()));
+            var content = GenerateStaticClass(_touchNameSpace, "Integers", builder.ToString());
+            FileHandler.WriteToFile(_targetDir, "Integers.cs", content);
         }
 
 
@@ -136,33 +136,31 @@ private static MonoTouch.UIKit.UIColor FromHexString(string hexValue)
     switch (colorString.Length)
     {
         case 3: // #RGB
-            {
                 red = Convert.ToInt32(string.Format(""{0}{0}"", colorString.Substring(0, 1)), 16) / 255f;
                 green = Convert.ToInt32(string.Format(""{0}{0}"", colorString.Substring(1, 1)), 16) / 255f;
                 blue = Convert.ToInt32(string.Format(""{0}{0}"", colorString.Substring(2, 1)), 16) / 255f;
                 return MonoTouch.UIKit.UIColor.FromRGB(red, green, blue);
-            }
+            
         case 6: // #RRGGBB
-            {
                 red = Convert.ToInt32(colorString.Substring(0, 2), 16) / 255f;
                 green = Convert.ToInt32(colorString.Substring(2, 2), 16) / 255f;
                 blue = Convert.ToInt32(colorString.Substring(4, 2), 16) / 255f;
                 return MonoTouch.UIKit.UIColor.FromRGB(red, green, blue);
-            }
+            
         case 8: // #AARRGGBB
-            {
                 var alpha = Convert.ToInt32(colorString.Substring(0, 2), 16)/255f;
                 red = Convert.ToInt32(colorString.Substring(2, 2), 16)/255f;
                 green = Convert.ToInt32(colorString.Substring(4, 2), 16) / 255f;
                 blue = Convert.ToInt32(colorString.Substring(6, 2), 16) / 255f;
                 return MonoTouch.UIKit.UIColor.FromRGBA(red, green, blue, alpha);
-            }
+            
         default:
             throw new ArgumentOutOfRangeException(string.Format(""Invalid color value {0} is invalid. It should be a hex value of the form #RBG, #RRGGBB, or #AARRGGBB"", hexValue));
 
     }
 }");
-			File.WriteAllText(Path.Combine(_targetDir, "Colors.cs"), GenerateStaticClass(_touchNameSpace, "Colors", builder.ToString()));
+		    var content = GenerateStaticClass(_touchNameSpace, "Colors", builder.ToString());
+            FileHandler.WriteToFile(_targetDir, "Colors.cs", content);
 		}
 
 
