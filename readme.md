@@ -1,8 +1,7 @@
 ##Overview
 Cross platform way to migrate PCL Resources over to Android and iOS. Mapleton Hill provides no guarantee of further development of this code. Be aware that this project is still under development. 
 
-This project will automatically generate `*.xml` resource files for Android, and a `CustomUIColor.cs` class for iOS (more iOS 
-support to come).
+This project will automatically generate `*.xml` resource files for Android, and static classes for iOS bool, dimen, integer, color, string resources (no items.resx support).
 
 ##Recommended Usage
 Put all of your resources in `*.resx` files in your Portable Class Libraries (PCL's)
@@ -24,14 +23,18 @@ usage:
 
     ResourceMigrator.exe /path/to/solution
 
-An easy way to integrate this tool with your project is to place the exe in your solution's root, add a prebuild configuration that looks like: 
+An easy way to integrate this tool with your VisualStudio project is to place the exe in your solution's root, and add the following to your iOS/Android pre-build configuration (right click the project, and go to Properties > Build Events > Pre-Build Event Command Line.) 
 
     $(SolutionDir)ResourceMigrator.exe $(SolutionDir)
 
-to your iOS and Android projects. 
+ 
 
-todo:
+##Issues
+ - Doesn't automatically update csproj to include new resources
+ - Doesn't always create missing directories (creates them for some iOS resources)
+ - No iOS "items" support -- not sure what this would look like
+ - Doesn't handle multiple Android/iOS projects
+ - Doesn't handle multiple resources from different PCLs under the same name (PCL_1.bools isn't combined with PCL_2.bools) 
+ - Android localized Strings aren't yet supported (/values-es/strings.xml should be created, but /values/es.xml is the result)
+ - iOS localized strings require more setup than simply creating the files in directories -- and this is not automated. 
 
- - Automatically update csproj file with any newly created files if it's not already in there.
- - Automatically create the appropriate directory if it doesn't exist.
- - Add more iOS support as the need arises.
