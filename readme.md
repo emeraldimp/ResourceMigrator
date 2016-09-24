@@ -4,7 +4,7 @@ Cross platform way to migrate PCL Resources over to Android and iOS. Mapleton Hi
 This project will automatically generate `*.xml` resource files for Android, and static classes for iOS bool, dimen, integer, color, string resources (no items.resx support).
 
 ##Recommended Usage
-Put all of your resources in `*.resx` files in your Portable Class Libraries (PCL's)
+Put all of your resources in `*.resx` files in your Portable Class Libraries (PCL's), run the tool, and add the generated resources to the project. ResourceMigrator will ignore projects with "Test" in their name. 
 
  *note: if you start your file name with the type of resource you're generating, it will generate the appropriate resource for Android automatically*
 
@@ -27,11 +27,11 @@ An easy way to integrate this tool with your VisualStudio project is to place th
 
     $(SolutionDir)ResourceMigrator.exe $(SolutionDir)
 
- 
+ Additionally, if you don't supply a path to the Solution, ResourceMigrator will assume it's in the Solution root, and go from there.
 
 ##Issues
  - Doesn't automatically update csproj to include new resources
- - No iOS "items" support -- not sure what this would look like
+ - No iOS "items.xml" support -- not sure what this would look like
  - Doesn't handle multiple resources from different PCLs under the same name (PCL_1.bools isn't combined with PCL_2.bools) 
- - iOS localized strings require more setup than simply creating the files in directories -- and this is not automated. 
+
 
