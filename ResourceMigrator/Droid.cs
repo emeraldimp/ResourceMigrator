@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ResourceMigrator
 {
@@ -59,8 +60,15 @@ namespace ResourceMigrator
 
             foreach (var key in strings.Keys)
             {
+                var escapedString = strings[key].ToEscapedString();
+
+                if (Regex.IsMatch(escapedString, "<.+>"))
+                {
+                    escapedString = "<![CDATA[" + escapedString + "]]>";
+                }
+
                 builder.Append("    ");
-                builder.AppendLine(string.Format("<{0} name=\"{1}\">{2}</{0}>", resourceType, key, strings[key].ToEscapedString()));
+                builder.AppendLine(string.Format("<{0} name=\"{1}\">{2}</{0}>", resourceType, key, escapedString));
             }
 
             builder.AppendLine("</resources>");
