@@ -1,19 +1,18 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
-
-
-// originally taken from http://stackoverflow.com/a/16987412/124069
+using System.Threading.Tasks;
 
 namespace ResourceMigrator
 {
-    public class Program
+    public class ResourceMigrator
     {
-        private static void Main(string[] args)
+        /// <summary>
+        ///     Creates an instance of the resource migrator tool with respect to the given solution path
+        /// </summary>
+        /// <param name="solutionPath"></param>
+        public ResourceMigrator(string solutionPath)
         {
-            // Get the solution path from the execution arguments
-            var solutionPath = args.Length == 0 ? AppDomain.CurrentDomain.BaseDirectory : args[0];
-
             // Load the projects from the solution
             var solution = FileHandler.GetSolutionFromPath(solutionPath);
             var projects = FileHandler.GetProjects(solution, solutionPath);
