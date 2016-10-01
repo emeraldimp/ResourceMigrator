@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5C4ACE5A-AD20-41A2-B345-091B1F64F23B}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{719CEEE3-FF1C-4752-93CB-8CAFF0B3BA18}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ResourceMigratorConsoleApp</RootNamespace>
-    <AssemblyName>ResourceMigratorConsoleApp</AssemblyName>
+    <RootNamespace>ResourceMigrator</RootNamespace>
+    <AssemblyName>ResourceMigrator</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,17 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Droid.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="FileHandler.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="IDeviceHandler.cs" />
+    <Compile Include="ProjectModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ResourceMigrator\ResourceMigrator.csproj">
-      <Project>{719ceee3-ff1c-4752-93cb-8caff0b3ba18}</Project>
-      <Name>ResourceMigrator</Name>
-    </ProjectReference>
+    <Compile Include="ResourceMigrator.cs" />
+    <Compile Include="SolutionParser.cs" />
+    <Compile Include="Touch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
