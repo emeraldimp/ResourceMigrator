@@ -7,13 +7,21 @@ namespace ResourceMigrator
 {
     public class ResourceMigrator
     {
+        public static string AssemblyInfo;
+        public static string ToolType;
+
+
         /// <summary>
         ///     Creates an instance of the resource migrator tool with respect to the given solution path
         /// </summary>
+        /// <param name="toolType"></param>
         /// <param name="solutionPath">The path to the solution containing the PCL / Mobile projects</param>
-        /// <param name="assemblyVersion">The version of the executing assembly (used to mark auto-generated files)</param>
-        public ResourceMigrator(string assemblyVersion, string solutionPath)
+        /// <param name="assemblyInfo">The version of the executing assembly (used to mark auto-generated files)</param>
+        public ResourceMigrator(string assemblyInfo, string toolType, string solutionPath)
         {
+            ToolType = toolType;
+            AssemblyInfo = assemblyInfo;
+
             // Load the projects from the solution
             var solution = FileHandler.GetSolutionFromPath(solutionPath);
             var projects = FileHandler.GetProjects(solution, solutionPath);
