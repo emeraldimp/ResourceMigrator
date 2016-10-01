@@ -10,6 +10,8 @@ using System.Globalization;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Reflection;
+using EnvDTE;
+using System.IO;
 
 namespace ResourceMigratorExtension
 {
@@ -91,24 +93,48 @@ namespace ResourceMigratorExtension
         /// <param name="e">Event args.</param>
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            var solutionDirectory = "";
-            var assemblyVersion = Assembly.GetAssembly(typeof(MigrateResourcesCommand)).GetName().Version.ToString();
+            // Get the current project's Solution Directory
+            string solutionDirectory = null;
+            try
+            {
+                DTE dte = (DTE) ServiceProvider.GetService(typeof(DTE));
+                solutionDirectory = Path.GetDirectoryName(dte.Solution.FullName);
+            }
+            catch
+            {
+                VsShellUtilities.ShowMessageBox(
+                    ServiceProvider,
+                    "It doesn't appear that a Solution is currently open.",
+                    "No Solution Error",
+                    OLEMSGICON.OLEMSGICON_INFO,
+                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST
+                );
+            }
 
-            //new ResourceMigrator.ResourceMigrator(assemblyVersion, solutionDirectory);
+            // If we failed to get the Solution Directory, quit
+            if(solutionDirectory == null)
+            {
+                return;
+            }
 
-            /*
-            string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-            string title = "MigrateResourcesCommand";
-
-            // Show a message box to prove we were here
-            VsShellUtilities.ShowMessageBox(
-                this.ServiceProvider,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-                */
+            // Try to run the ResourceMigrator
+            try
+            {
+                var assemblyVersion = Assembly.GetAssembly(typeof(MigrateResourcesCommand)).GetName().Version.ToString();
+                new ResourceMigrator.ResourceMigrator(assemblyVersion, "ResourceMigrator VisualStudio Extension", solutionDirectory);
+            }
+            catch(Exception ex)
+            {
+                VsShellUtilities.ShowMessageBox(
+                    ServiceProvider,
+                    $"ResourceMigrator encountered an exception: {ex.Message}",
+                    "ResourceMigrator Failed",
+                    OLEMSGICON.OLEMSGICON_INFO,
+                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST
+                );
+            }
         }
     }
 }
