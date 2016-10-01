@@ -36,7 +36,7 @@
          group as the part of a menu contained between two lines. The parent of a group
          must be a menu. -->
     <Groups>
-      <Group guid="guidMigrateResourcesCommandPackageCmdSet" id="MyMenuGroup" priority="0x0600">
+      <Group guid="guidMigrateResourcesCommandPackageCmdSet" id="ResourceMigratorGroup" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
       </Group>
     </Groups>
@@ -53,8 +53,8 @@
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
       <Button guid="guidMigrateResourcesCommandPackageCmdSet" id="MigrateResourcesCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidMigrateResourcesCommandPackageCmdSet" id="MyMenuGroup" />
-        <Icon guid="guidImages" id="bmpPic1" />
+        <Parent guid="guidMigrateResourcesCommandPackageCmdSet" id="ResourceMigratorGroup" />
+        <Icon guid="menuIcons" id="iconSmall" />
         <Strings>
           <ButtonText>Migrate PCL Resources</ButtonText>
         </Strings>
@@ -68,7 +68,7 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
             inside a button definition. An important aspect of this declaration is that the element id
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\MigrateResourcesCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
+      <Bitmap guid="menuIcons" href="Resources\resource_migrator_small.ico" usedList="iconSmall" />
     </Bitmaps>
   </Commands>
 
@@ -78,17 +78,14 @@
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidMigrateResourcesCommandPackageCmdSet" value="{73d5da5f-0b3d-4af1-ad0f-7f0729dce8f1}">
-      <IDSymbol name="MyMenuGroup" value="0x1020" />
+      <IDSymbol name="ResourceMigratorGroup" value="0x1020" />
       <IDSymbol name="MigrateResourcesCommandId" value="0x0100" />
     </GuidSymbol>
 
-    <GuidSymbol name="guidImages" value="{0cccdc9a-2a88-4fbf-98f3-01afc232b39f}" >
-      <IDSymbol name="bmpPic1" value="1" />
-      <IDSymbol name="bmpPic2" value="2" />
-      <IDSymbol name="bmpPicSearch" value="3" />
-      <IDSymbol name="bmpPicX" value="4" />
-      <IDSymbol name="bmpPicArrows" value="5" />
-      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    <!-- Images -->
+    <GuidSymbol name="menuIcons" value="{50C0D7AD-395E-4E79-9B33-0782C7C6C50B}">
+      <IDSymbol name="iconSmall" value="1" />
     </GuidSymbol>
+
   </Symbols>
 </CommandTable>

@@ -9,6 +9,7 @@ using System.ComponentModel.Design;
 using System.Globalization;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Reflection;
 
 namespace ResourceMigratorExtension
 {
@@ -46,11 +47,11 @@ namespace ResourceMigratorExtension
 
             this.package = package;
 
-            OleMenuCommandService commandService = this.ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            OleMenuCommandService commandService = ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
             {
                 var menuCommandID = new CommandID(CommandSet, CommandId);
-                var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
+                var menuItem = new MenuCommand(MenuItemCallback, menuCommandID);
                 commandService.AddCommand(menuItem);
             }
         }
@@ -68,7 +69,7 @@ namespace ResourceMigratorExtension
         /// </summary>
         private IServiceProvider ServiceProvider {
             get {
-                return this.package;
+                return package;
             }
         }
 
@@ -90,6 +91,12 @@ namespace ResourceMigratorExtension
         /// <param name="e">Event args.</param>
         private void MenuItemCallback(object sender, EventArgs e)
         {
+            var solutionDirectory = "";
+            var assemblyVersion = Assembly.GetAssembly(typeof(MigrateResourcesCommand)).GetName().Version.ToString();
+
+            //new ResourceMigrator.ResourceMigrator(assemblyVersion, solutionDirectory);
+
+            /*
             string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
             string title = "MigrateResourcesCommand";
 
@@ -101,6 +108,7 @@ namespace ResourceMigratorExtension
                 OLEMSGICON.OLEMSGICON_INFO,
                 OLEMSGBUTTON.OLEMSGBUTTON_OK,
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                */
         }
     }
 }

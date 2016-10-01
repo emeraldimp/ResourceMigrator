@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace ResourceMigrator
 {
@@ -10,8 +10,9 @@ namespace ResourceMigrator
         /// <summary>
         ///     Creates an instance of the resource migrator tool with respect to the given solution path
         /// </summary>
-        /// <param name="solutionPath"></param>
-        public ResourceMigrator(string solutionPath)
+        /// <param name="solutionPath">The path to the solution containing the PCL / Mobile projects</param>
+        /// <param name="assemblyVersion">The version of the executing assembly (used to mark auto-generated files)</param>
+        public ResourceMigrator(string assemblyVersion, string solutionPath)
         {
             // Load the projects from the solution
             var solution = FileHandler.GetSolutionFromPath(solutionPath);

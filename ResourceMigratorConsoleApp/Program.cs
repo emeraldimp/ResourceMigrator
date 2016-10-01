@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Reflection;
 
 namespace ResourceMigratorConsoleApp
 {
@@ -8,7 +8,9 @@ namespace ResourceMigratorConsoleApp
         public static void Main(string[] args)
         {
             var solutionPath = args.Length == 0 ? AppDomain.CurrentDomain.BaseDirectory : args[0];
-            new ResourceMigrator.ResourceMigrator(solutionPath);
+			var assemblyVersion = Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString();
+
+            new ResourceMigrator.ResourceMigrator(assemblyVersion, solutionPath);
         }
     }
 }
