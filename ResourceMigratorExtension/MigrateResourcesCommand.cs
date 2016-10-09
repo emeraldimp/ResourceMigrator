@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="MigrateResourcesCommand.cs" company="Company">
-//     Copyright (c) Company.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Reflection;
@@ -33,7 +27,7 @@ namespace ResourceMigratorExtension
         /// <summary>
         ///     VS Package that provides this command, not null.
         /// </summary>
-        private readonly Package package;
+        private readonly Package _package;
 
         /// <summary>
         ///     Gets the instance of the command.
@@ -43,7 +37,7 @@ namespace ResourceMigratorExtension
         /// <summary>
         ///     Gets the service provider from the owner package.
         /// </summary>
-        private IServiceProvider ServiceProvider => package;
+        private IServiceProvider ServiceProvider => _package;
 
 
         /// <summary>
@@ -55,10 +49,10 @@ namespace ResourceMigratorExtension
         {
             if (package == null)
             {
-                throw new ArgumentNullException("package");
+                throw new ArgumentNullException(nameof(package));
             }
 
-            this.package = package;
+            _package = package;
 
             var commandService = ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
