@@ -107,12 +107,16 @@ namespace ResourceMigratorExtension
                 return;
             }
 
-            // Try to run the ResourceMigrator
             try
             {
                 var assemblyVersion = Assembly.GetAssembly(typeof(MigrateResourcesCommand)).GetName().Version.ToString();
-                new ResourceMigrator.ResourceMigrator(assemblyVersion, "ResourceMigrator VisualStudio Extension",
-                    solutionDirectory);
+
+                // Run the ResourceMigrator tool on the Solution
+                ResourceMigrator.ResourceMigrator.Migrate(
+                    assemblyVersion,
+                    "ResourceMigrator VisualStudio Extension",
+                    solutionDirectory
+                );
             }
             catch (Exception ex)
             {

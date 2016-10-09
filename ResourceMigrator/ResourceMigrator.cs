@@ -1,74 +1,86 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using Microsoft.Build.Construction;
 
 
 namespace ResourceMigrator
 {
-    public class ResourceMigrator
+    public static class ResourceMigrator
     {
         public static string AssemblyInfo;
         public static string ToolType;
 
 
         /// <summary>
-        ///     Creates an instance of the resource migrator tool with respect to the given solution path
+        ///     Migrates the .resx resource files' contents into the iOS and Android specific projects contained in the Solution
+        ///     while ignoring projects whose names contain strings from the blacklist.
         /// </summary>
         /// <param name="toolType"></param>
         /// <param name="solutionPath">The path to the solution containing the PCL / Mobile projects</param>
         /// <param name="assemblyInfo">The version of the executing assembly (used to mark auto-generated files)</param>
-        public ResourceMigrator(string assemblyInfo, string toolType, string solutionPath)
+        public static void Migrate(string assemblyInfo, string toolType, string solutionPath)
         {
             ToolType = toolType;
             AssemblyInfo = assemblyInfo;
 
             // Load the projects from the solution
-            var solution = FileHandler.GetSolutionFromPath(solutionPath);
-            var projects = FileHandler.GetProjects(solution, solutionPath);
+            var projects = SolutionHandler.CategorizeProjects(
+                SolutionHandler.FilterBlacklistedProjects(
+                    SolutionHandler.GetProjectsForSolution(
+                        FileHandler.FindSolutionFileInDir(solutionPath)
+                    )
+                )
+            );
 
-            // Look for a PCL to pull resx files from 
-            var pcl = projects.FirstOrDefault(p => p.PlatformType == PlatformType.Pcl);
-            if (pcl == null)
+            // Check for illegal states
+            if (projects[ProjectType.Pcl].Count == 0)
             {
                 throw new Exception("Your resource files must be located in a PCL -- no PCL found.");
             }
 
-            // Find the platform-specific projects 
-            var windows = projects.Where(p => p.PlatformType == PlatformType.Windows).ToList();
-            var ios = projects.Where(p => p.PlatformType == PlatformType.Ios).ToList();
-            var droid = projects.Where(p => p.PlatformType == PlatformType.Droid).ToList();
+            if ((projects[ProjectType.Droid].Count == 0) && (projects[ProjectType.Ios].Count == 0))
+            {
+                throw new Exception("Did not find any iOS or Android projects to migrate resources to.");
+            }
 
-            // Grab the PCL's resx files 
-            var resourceFiles = FileHandler.GetAllResourceFiles(pcl.ProjectPath);
+            // Load the .resx files
+            var resourceFiles = FileHandler.GetResxFilesForPcls(projects[ProjectType.Pcl]);
 
+            // Translate the resx files into the native projects
+            TranslateResourceFiles(projects, resourceFiles);
+        }
+
+
+        /// <summary>
+        ///     Given a list of resx file locations and a collection of projects, loads each resx file,
+        ///     and converts it into native representations for each compatible native project.
+        ///     Native representations are immediately written to disk.
+        /// </summary>
+        /// <param name="projects">The collection of projects to process</param>
+        /// <param name="resourceFiles">The collection of resx file locations</param>
+        private static void TranslateResourceFiles(
+            IReadOnlyDictionary<ProjectType, List<ProjectInSolution>> projects,
+            IEnumerable<string> resourceFiles
+        )
+        {
             // For each resx file, translate the contents into native representations
             foreach (var file in resourceFiles)
             {
+                // Load the resx file
                 var fileInfo = new FileInfo(file);
                 var resources = fileInfo.LoadResources();
 
-                // Create the Android resources
-                if (droid.Count > 0)
+                // Create Android resources
+                foreach (var proj in projects[ProjectType.Droid])
                 {
-                    foreach (var proj in droid)
-                    {
-                        new Droid().WriteToTarget(proj, resources, fileInfo);
-                    }
+                    AndroidHandler.WriteToTarget(proj, resources, fileInfo);
                 }
 
-                // Create the iOS resources
-                if (ios.Count > 0)
+                // Create iOS resources
+                foreach (var proj in projects[ProjectType.Ios])
                 {
-                    foreach (var proj in ios)
-                    {
-                        new Touch().WriteToTarget(proj, resources, fileInfo);
-                    }
-                }
-
-                // Create the Windows Phone resources
-                if (windows.Count > 0)
-                {
-                    //new Phone().WriteToTarget(phone, resources, fileInfo);
+                    new IosHandler().WriteToTarget(proj, resources, fileInfo);
                 }
             }
         }

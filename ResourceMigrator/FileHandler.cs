@@ -1,105 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml;
+using System.Linq;
+using Microsoft.Build.Construction;
 
 
 namespace ResourceMigrator
 {
     public static class FileHandler
     {
-        private static readonly string _iosUniqueIdentifier = "iOS";
-        private static readonly string _androidUniqueIdentifier1 = "Droid";
-        private static readonly string _androidUniqueIdentifier2 = "Android";
-        private static readonly string _pclUniqueIdentifier = "Portable";
-        private static readonly string _testUniqueIdentifier = "Test";
-
-
-        public static IList<ProjectModel> GetProjects(SolutionParser solution, string solutionPath)
+        /// <summary>
+        ///     Finds all the .resx files in the given directory.
+        /// </summary>
+        /// <param name="directory">The directory in which to search</param>
+        /// <returns>Returns an enumerable collection of their locations.</returns>
+        public static List<string> GetResxFilesInDir(string directory)
         {
-            // Our return list of projects
-            var projects = new List<ProjectModel>();
+            return Directory.GetFiles(directory, "*.resx", SearchOption.AllDirectories).ToList();
+        }
 
-            // Iterate through the solution's list of projects looking for iOS/PCL/Android projects
-            foreach (var proj in solution.Projects)
+
+        /// <summary>
+        ///     Aggregates all the resx files found in the list of passed projects.
+        /// </summary>
+        /// <param name="pcls">The list of PCLs to process (doesn't really have to be PCLs)</param>
+        /// <returns>A list of file locations to all the resx files across all the PCLs</returns>
+        public static List<string> GetResxFilesForPcls(List<ProjectInSolution> pcls)
+        {
+            var resourceFiles = new List<string>();
+
+            foreach (var pcl in pcls)
             {
-                // Exclude test projects
-                if (proj.ProjectName.Contains(_testUniqueIdentifier))
-                {
-                    continue;
-                }
-
-                var xmldoc = new XmlDocument();
-                try
-                {
-                    xmldoc.Load(Path.Combine(solutionPath, proj.RelativePath));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                var mgr = new XmlNamespaceManager(xmldoc.NameTable);
-                mgr.AddNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003");
-
-                var elemList = xmldoc.GetElementsByTagName("Import");
-                for (var i = 0; i < elemList.Count; i++)
-                {
-                    var xmlAttributeCollection = elemList[i].Attributes;
-                    if (xmlAttributeCollection == null)
-                    {
-                        continue;
-                    }
-
-                    var attrVal = xmlAttributeCollection["Project"].Value;
-                    var projectPath = Path.Combine(solutionPath, proj.RelativePath)
-                        .Replace(proj.ProjectName + ".csproj", "");
-
-                    if (attrVal.Contains(_iosUniqueIdentifier))
-                    {
-                        projects.Add(new ProjectModel {
-                            ProjectNamespace = proj.ProjectName,
-                            ProjectPath = projectPath,
-                            PlatformType = PlatformType.Ios
-                        });
-                        break;
-                    }
-
-                    if (attrVal.Contains(_androidUniqueIdentifier1) || attrVal.Contains(_androidUniqueIdentifier2))
-                    {
-                        projects.Add(new ProjectModel {
-                            ProjectNamespace = proj.ProjectName,
-                            ProjectPath = projectPath,
-                            PlatformType = PlatformType.Droid
-                        });
-                        break;
-                    }
-
-                    if (attrVal.Contains(_pclUniqueIdentifier))
-                    {
-                        projects.Add(new ProjectModel {
-                            ProjectNamespace = proj.ProjectName,
-                            ProjectPath = projectPath,
-                            PlatformType = PlatformType.Pcl
-                        });
-                        break;
-                    }
-                }
+                resourceFiles.AddRange(GetResxFilesInDir(pcl.ContainingDirectory()));
             }
-            return projects;
+
+            return resourceFiles;
         }
 
 
-        public static IEnumerable<string> GetAllResourceFiles(string solutionPath)
-        {
-            return Directory.GetFiles(solutionPath, "*.resx", SearchOption.AllDirectories);
-        }
-
-
-        public static SolutionParser GetSolutionFromPath(string solutionPath)
+        /// <summary>
+        ///     Takes the solution directory, and find the solution file.
+        /// </summary>
+        /// <param name="solutionPath"></param>
+        /// <returns>The path to the solution file</returns>
+        public static string FindSolutionFileInDir(string solutionPath)
         {
             var files = Directory.GetFiles(solutionPath, "*.sln");
-            return new SolutionParser(files[0]);
+
+            if (files.Length == 0)
+            {
+                throw new Exception("Solution folder doesn't contain a .sln file!");
+            }
+
+            return files[0];
         }
 
 

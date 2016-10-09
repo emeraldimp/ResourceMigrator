@@ -2,15 +2,16 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Build.Construction;
 
 
 namespace ResourceMigrator
 {
-    public class Droid : IDeviceHandler
+    public static class AndroidHandler
     {
         // originally taken from http://stackoverflow.com/a/16987412/124069
 
-        public void WriteToTarget(ProjectModel project, IDictionary<string, string> strings, FileInfo sourceFile)
+        public static void WriteToTarget(ProjectInSolution project, IDictionary<string, string> strings, FileInfo sourceFile)
         {
             // Generate the XML representation of the data
             var resourceType = sourceFile.GetResourceType();
@@ -27,7 +28,7 @@ namespace ResourceMigrator
                 valuesDir = $"values-{inputFileName}/";
             }
 
-            var targetDir = Path.Combine(project.ProjectPath, $"resources/{valuesDir}");
+            var targetDir = Path.Combine(project.ContainingDirectory(), $"resources/{valuesDir}");
 
             // Write to file, creating directories as necessary
             FileHandler.WriteToFile(targetDir, outputFileName, content);
@@ -40,7 +41,7 @@ namespace ResourceMigrator
         /// <param name="resourceType"></param>
         /// <param name="strings"></param>
         /// <returns></returns>
-        public string GetXmlContent(string resourceType, IDictionary<string, string> strings)
+        public static string GetXmlContent(string resourceType, IDictionary<string, string> strings)
         {
             var builder = new StringBuilder();
 

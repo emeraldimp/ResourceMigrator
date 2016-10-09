@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
+using Microsoft.Build.Construction;
 
 
 namespace ResourceMigrator
@@ -154,6 +155,18 @@ namespace ResourceMigrator
                 default:
                     return "string";
             }
+        }
+
+
+        /// <summary>
+        ///     Extension method to get the containing directory of a project, rather than the path to its csproj file.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        public static string ContainingDirectory(this ProjectInSolution project)
+        {
+            var index = project.AbsolutePath.LastIndexOfAny(new[] {'/', '\\'});
+            return project.AbsolutePath.Substring(0, index + 1);
         }
     }
 }

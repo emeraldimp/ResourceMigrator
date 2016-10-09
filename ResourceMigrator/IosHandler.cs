@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Microsoft.Build.Construction;
 
 
 namespace ResourceMigrator
 {
-    public class Touch : IDeviceHandler
+    public class IosHandler
     {
         private string _targetDir;
         private IDictionary<string, string> _strings;
@@ -13,13 +14,13 @@ namespace ResourceMigrator
         private FileInfo _sourceFile;
 
 
-        public void WriteToTarget(ProjectModel project, IDictionary<string, string> strings, FileInfo sourceFile)
+        public void WriteToTarget(ProjectInSolution project, IDictionary<string, string> strings, FileInfo sourceFile)
         {
             // Prepare to write to iOS resources directory
             _sourceFile = sourceFile;
-            _targetDir = Path.Combine(project.ProjectPath, "resources/");
+            _targetDir = Path.Combine(project.ContainingDirectory(), "resources/");
             _strings = strings;
-            _touchNameSpace = project.ProjectNamespace + ".Resources";
+            _touchNameSpace = project.ProjectName + ".Resources";
 
             // Translate the resx loaded resources into their associated iOS resource type
             var resourceType = sourceFile.GetResourceType();
