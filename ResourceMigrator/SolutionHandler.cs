@@ -56,7 +56,7 @@ namespace ResourceMigrator
             foreach (var project in projects)
             {
                 var xmldoc = GetProjectXml(project.AbsolutePath);
-                var category = CategorizeProjectFromXml(xmldoc);
+                var category = CategorizeProjectXml(xmldoc);
 
                 returnDict[category].Add(project);
             }
@@ -70,7 +70,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="doc">The document for the csproj file</param>
         /// <returns>The project type -- possibly unknown</returns>
-        public static ProjectType CategorizeProjectFromXml(XmlDocument doc)
+        public static ProjectType CategorizeProjectXml(XmlDocument doc)
         {
             // Find the 'Import' tag, and get its 'Project' value
             var importTags = doc.GetElementsByTagName(Config.CsprojProjectTypeTag);

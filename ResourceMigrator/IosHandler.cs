@@ -10,6 +10,13 @@ namespace ResourceMigrator
 {
     public class IosHandler
     {
+        /// <summary>
+        ///     Writes the contents of a resx file (as key-value pairs) to the passed project using the iOS directory hierarchy and
+        ///     a series of static C# classes.
+        /// </summary>
+        /// <param name="project">The iOS project to write to</param>
+        /// <param name="strings">The resx file's contents as a key-value store</param>
+        /// <param name="sourceFile">The resx file's information</param
         public static void WriteToTarget(
             ProjectInSolution project,
             IDictionary<string, string> strings,

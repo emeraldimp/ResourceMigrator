@@ -95,7 +95,9 @@ namespace ResourceMigrator
             // Should never be hit, but you never know...
             if (file == null)
             {
-                throw new ArgumentNullException("File was null! @ Extensions.LoadResource(FileSystemInfo)");
+                throw new ArgumentNullException(
+                    $"Resx file ref was null! At ResourceMigrator.Extensions.LoadResources(FileSystemInfo)"
+                );
             }
 
             var returnDict = new Dictionary<string, string>();

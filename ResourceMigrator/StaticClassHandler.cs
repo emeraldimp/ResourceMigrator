@@ -12,15 +12,36 @@ namespace ResourceMigrator
     public static class StaticClassHandler
     {
         /// <summary>
+        ///     Function mapping key-value pairs and a type to static readonly fields that can live in a static class as constants.
+        /// </summary>
+        /// <param name="keyValues">A dictionary of variable names to variable values</param>
+        /// <param name="entryType">The data type for the entries (E.g. bool, string, int) </param>
+        /// <returns></returns>
+        public static string GenerateStaticClassContent(IDictionary<string, string> keyValues, string entryType)
+        {
+            var builder = new StringBuilder();
+
+            foreach (var item in keyValues)
+            {
+                builder.AppendLine(
+                    string.Format(Config.StaticValueTemplate, entryType, item.Key, item.Value)
+                );
+            }
+
+            return builder.ToString();
+        }
+
+
+        /// <summary>
         ///     iOS does have fancy XML resource files, so most project-wide resources will live in static classes.
         ///     This method takes a bunch of static class content, and creates a static class around that content.
         ///     -- Along with some nice warnings and formatting. This method only makes a static class, it is not
         ///     exclusive to iOS; just mostly used by the iOS handler.
         /// </summary>
-        /// <param name="nameSpace"></param>
-        /// <param name="className"></param>
-        /// <param name="contents"></param>
-        /// <returns></returns>
+        /// <param name="nameSpace">The namespace to place the class in</param>
+        /// <param name="className">The name of the class</param>
+        /// <param name="contents">The contents of the class (must be static)</param>
+        /// <returns>A string containing the complete class content</returns>
         public static string GenerateStaticClass(string nameSpace, string className, string contents)
         {
             var builder = new StringBuilder();
@@ -35,30 +56,9 @@ namespace ResourceMigrator
                 }
             }
 
-            var staticClass = string.Format(MigratorConfiguration.StaticClassTemplate, nameSpace, className, builder);
+            var staticClass = string.Format(Config.StaticClassTemplate, nameSpace, className, builder);
 
             return staticClass;
-        }
-
-
-        /// <summary>
-        ///     Function mapping key-value pairs and a type to static readonly fields that can live in a static class as constants.
-        /// </summary>
-        /// <param name="keyValues"></param>
-        /// <param name="entryType"></param>
-        /// <returns></returns>
-        public static string GenerateStaticClassContent(IDictionary<string, string> keyValues, string entryType)
-        {
-            var builder = new StringBuilder();
-
-            foreach (var item in keyValues)
-            {
-                builder.AppendLine(
-                    string.Format(Config.StaticValueTemplate, entryType, item.Key, item.Value)
-                );
-            }
-
-            return builder.ToString();
         }
     }
 }
