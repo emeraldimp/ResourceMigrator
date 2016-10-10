@@ -80,7 +80,7 @@ namespace ResourceMigrator
                 // Create iOS resources
                 foreach (var proj in projects[ProjectType.Ios])
                 {
-                    new IosHandler().WriteToTarget(proj, resources, fileInfo);
+                    IosHandler.WriteToTarget(proj, resources, fileInfo);
                 }
             }
         }

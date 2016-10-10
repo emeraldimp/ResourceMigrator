@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Construction;
+using Config = ResourceMigrator.MigratorConfiguration;
 
 
 namespace ResourceMigrator

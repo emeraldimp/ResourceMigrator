@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Build.Construction;
@@ -29,6 +30,14 @@ namespace ResourceMigrator
         {
             // Generate the XML representation of the data
             var resourceType = sourceFile.GetResourceType();
+
+            // Bool resources must be lowercase ('true' not 'True')
+            if (resourceType == ResourceType.Boolean)
+            {
+                strings = strings.ToDictionary(item => item.Key, item => item.Value.ToLower());
+            }
+
+            // Create Android resource XML 
             var content = GetXmlContent(resourceType, strings);
 
             // Setup output path and file name
@@ -37,7 +46,7 @@ namespace ResourceMigrator
 
             // Put translations in their appropriate directories (e.g. '/values-es/strings.xml')
             var valuesDir = "values/";
-            if (resourceType.Equals("string") && !inputFileName.Equals("strings"))
+            if ((resourceType == ResourceType.String) && !inputFileName.Equals("strings"))
             {
                 valuesDir = $"values-{inputFileName}/";
             }
@@ -54,12 +63,21 @@ namespace ResourceMigrator
         /// <param name="resourceType"></param>
         /// <param name="strings"></param>
         /// <returns></returns>
-        public static string GetXmlContent(string resourceType, IDictionary<string, string> strings)
+        public static string GetXmlContent(ResourceType resourceType, IDictionary<string, string> strings)
         {
+            var units = string.Empty;
+            if (resourceType == ResourceType.Dimension)
+            {
+                units = "dp";
+            }
+
+            if (resourceType == ResourceType.Font)
+            {
+                units = "sp";
+            }
+
             var builder = new StringBuilder();
-
             builder.Append(Config.AndroidXmlHeader);
-
             builder.AppendLine("<resources>");
 
             foreach (var key in strings.Keys)
@@ -72,7 +90,15 @@ namespace ResourceMigrator
                 }
 
                 builder.Append("    ");
-                builder.AppendLine(string.Format("<{0} name=\"{1}\">{2}</{0}>", resourceType, key, escapedString));
+                builder.AppendLine(
+                    string.Format(
+                        "<{0} name=\"{1}\">{2}{3}</{0}>",
+                        resourceType.AndroidXmlType(),
+                        key,
+                        escapedString,
+                        units
+                    )
+                );
             }
 
             builder.AppendLine("</resources>");

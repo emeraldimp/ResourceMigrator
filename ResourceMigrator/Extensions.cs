@@ -107,19 +107,21 @@ namespace ResourceMigrator
             // Grab the data node containing the resx key-value pairs
             var nodes = doc.SelectNodes("//data");
 
-            if (nodes != null)
-                // Add each key-value pair to the dictionary
+            if (nodes == null)
             {
-                foreach (XmlNode node in nodes)
+                return returnDict;
+            }
+
+            // Add each key-value pair from the resx file to the dictionary
+            foreach (XmlNode node in nodes)
+            {
+                if (node.Attributes == null)
                 {
-                    if (node.Attributes == null)
-                    {
-                        continue;
-                    }
-                    var name = node.Attributes["name"].Value;
-                    var value = node.ChildNodes[1].InnerText;
-                    returnDict.Add(name, value);
+                    continue;
                 }
+                var name = node.Attributes["name"].Value;
+                var value = node.ChildNodes[1].InnerText;
+                returnDict.Add(name, value);
             }
 
             // return the key-value pairs
@@ -133,27 +135,27 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public static string GetResourceType(this FileSystemInfo fileName)
+        public static ResourceType GetResourceType(this FileSystemInfo fileName)
         {
             switch (fileName.Name.ToLower().Substring(0, Math.Min(3, fileName.Name.Length)))
             {
                 case "col":
-                    return "color";
+                    return ResourceType.Color;
 
                 case "boo":
-                    return "bool";
+                    return ResourceType.Boolean;
 
                 case "dim":
-                    return "dimen";
-
-                case "ite":
-                    return "item";
+                    return ResourceType.Dimension;
 
                 case "int":
-                    return "integer";
+                    return ResourceType.Integer;
+
+                case "fon":
+                    return ResourceType.Font;
 
                 default:
-                    return "string";
+                    return ResourceType.String;
             }
         }
 
