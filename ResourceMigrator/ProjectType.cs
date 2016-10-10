@@ -3,9 +3,9 @@
     public enum ProjectType
     {
         Windows,
-        Ios, 
-        Droid, 
+        Ios,
+        Droid,
         Pcl,
-        Unknown 
+        Unknown
     }
 }
