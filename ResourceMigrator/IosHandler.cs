@@ -16,7 +16,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="project">The iOS project to write to</param>
         /// <param name="strings">The resx file's contents as a key-value store</param>
-        /// <param name="sourceFile">The resx file's information</param
+        /// <param name="sourceFile">The resx file's information</param>
         public static void WriteToTarget(
             ProjectInSolution project,
             IDictionary<string, string> strings,
