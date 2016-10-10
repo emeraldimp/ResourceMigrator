@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("ResourceMigrator")]
+[assembly: AssemblyTitle("ResourceMigratorConsoleApp")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ResourceMigrator")]
+[assembly: AssemblyProduct("ResourceMigratorConsoleApp")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("719ceee3-ff1c-4752-93cb-8caff0b3ba18")]
+[assembly: Guid("5c4ace5a-ad20-41a2-b345-091b1f64f23b")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -36,5 +36,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
