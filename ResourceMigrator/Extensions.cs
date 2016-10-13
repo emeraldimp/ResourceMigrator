@@ -16,7 +16,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="input"></param>
         /// <returns>Escaped representation of the string</returns>
-        public static string ToEscapedString(this string input)
+        public static string EscapeString(this string input)
         {
             // Iterate through the string character by character looking for characters that need to be escaped. 
             var literal = new StringBuilder(input.Length + 2);
@@ -82,6 +82,44 @@ namespace ResourceMigrator
                 }
             }
             return literal.ToString();
+        }
+
+
+        public static string EscapeForXml(this string value)
+        {
+            var output = new StringBuilder();
+
+            foreach (var c in value)
+            {
+                switch (c)
+                {
+                    case '&':
+                        output.Append("&amp;");
+                        break;
+
+                    case '\"':
+                        output.Append("&quot;");
+                        break;
+
+                    case '\'':
+                        output.Append("&apos;");
+                        break;
+
+                    case '>':
+                        output.Append("&gt;");
+                        break;
+
+                    case '<':
+                        output.Append("&lt;");
+                        break;
+
+                    default:
+                        output.Append(c);
+                        break;
+                }
+            }
+
+            return output.ToString();
         }
 
 

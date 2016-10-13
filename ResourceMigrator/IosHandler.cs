@@ -40,7 +40,7 @@ namespace ResourceMigrator
                 case ResourceType.Color:
                     strings = strings.ToDictionary(
                         item => item.Key,
-                        item => $"FromHexString(\"{item.Value.ToEscapedString()}\")"
+                        item => $"FromHexString(\"{item.Value.EscapeString()}\")"
                     );
 
                     staticFields = StaticClassHandler.GenerateStaticClassContent(
@@ -89,8 +89,8 @@ namespace ResourceMigrator
             // Translate each key-value pair into the iOS .strings format: "key" = "value
             foreach (var key in strings.Keys)
             {
-                var stringKey = key.ToEscapedString();
-                var stringValue = strings[key].ToEscapedString();
+                var stringKey = key.EscapeString();
+                var stringValue = strings[key].EscapeString();
 
                 // Append the key-value pair to the new file's contents
                 builder.AppendLine(string.Format(stringDefinition, stringKey, stringValue));

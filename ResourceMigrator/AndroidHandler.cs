@@ -82,11 +82,15 @@ namespace ResourceMigrator
 
             foreach (var key in strings.Keys)
             {
-                var escapedString = strings[key].ToEscapedString();
+                var escapedString = strings[key].EscapeString();
 
                 if (Regex.IsMatch(escapedString, "<.+>"))
                 {
                     escapedString = "<![CDATA[" + escapedString + "]]>";
+                }
+                else
+                {
+                    escapedString = escapedString.EscapeForXml();
                 }
 
                 builder.Append("    ");
