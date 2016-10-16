@@ -1,9 +1,13 @@
 ##Overview
 Cross platform way to migrate PCL Resources over to Android and iOS. Mapleton Hill provides no guarantee of further development of this code. Be aware that this project is still under development. 
 
-This project will automatically generate `*.xml` resource files for Android, and static classes for iOS bool, dimen, integer, color, string resources (no items.resx support).
+This project will automatically generate `*.xml` resource files for Android, and static classes for iOS bool, dimen, integer, color, string resources.
 
-The project now contains the code for a VisualStudio extension, but only for VisualStudio 2015+
+##Repository Contents
+The project contains a Visual Studio C# Solution containing three projects:
+ - A Class Library project containing the actual translation logic
+ - A Console App project that builds to an executable that can be run from the command line, or when double-clicked in a Solution root, translates the resources for that Solution. 
+ - A Visual Studio Extension project that builds to a .vsix file that can be installed into Visual Studio 2015 installations. The tool can be found in the Tools menu. Visual Studio must be restarted after the installation.  
 
 ##Recommended Usage
 Put all of your resources in `*.resx` files in your Portable Class Libraries (PCL's), run the tool, and add the generated resources to the project. ResourceMigrator will ignore projects with "Test" in their name. 
@@ -13,7 +17,7 @@ Put all of your resources in `*.resx` files in your Portable Class Libraries (PC
 example:
  
     bools.resx       // will generate bool resources
-    fonts.resx       // will generate font resources
+    fonts.resx       // will generate font size resources
     dimensions.resx  // will generate dimen resources
     integers.resx    // will generate int resources
     colors.resx      // will generate color resources
