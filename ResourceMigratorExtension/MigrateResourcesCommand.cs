@@ -108,7 +108,7 @@ namespace ResourceMigratorExtension
                 // Run the ResourceMigrator tool on the Solution
                 ResourceMigrator.ResourceMigrator.Migrate(
                     assemblyVersion,
-                    "ResourceMigrator VisualStudio Extension",
+                    "VisualStudio Extension",
                     solutionDirectory
                 );
             }

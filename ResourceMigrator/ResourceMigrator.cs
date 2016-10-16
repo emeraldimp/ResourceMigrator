@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Microsoft.Build.Construction;
 
 
@@ -8,8 +9,9 @@ namespace ResourceMigrator
 {
     public static class ResourceMigrator
     {
-        public static string AssemblyInfo;
+        public static string ToolVersion;
         public static string ToolType;
+        public static string ClassLibraryVersion;
 
 
         /// <summary>
@@ -18,11 +20,12 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="toolType"></param>
         /// <param name="solutionPath">The path to the solution containing the PCL / Mobile projects</param>
-        /// <param name="assemblyInfo">The version of the executing assembly (used to mark auto-generated files)</param>
-        public static void Migrate(string assemblyInfo, string toolType, string solutionPath)
+        /// <param name="toolVersion">The version of the executing assembly (used to mark auto-generated files)</param>
+        public static void Migrate(string toolVersion, string toolType, string solutionPath)
         {
             ToolType = toolType;
-            AssemblyInfo = assemblyInfo;
+            ToolVersion = toolVersion;
+            ClassLibraryVersion = GetAssemblyVersion();
 
             // Load the projects from the solution
             var projects = SolutionHandler.CategorizeProjects(
@@ -83,6 +86,19 @@ namespace ResourceMigrator
                     IosHandler.WriteToTarget(proj, resources, fileInfo);
                 }
             }
+        }
+
+
+        /// <summary>
+        ///     Gets the version for the Class Library's assembly.
+        /// </summary>
+        /// <returns>The assembly version as a string</returns>
+        public static string GetAssemblyVersion()
+        {
+            var assembly = typeof(ResourceMigrator).GetTypeInfo().Assembly;
+            var assemblyName = new AssemblyName(assembly.FullName);
+
+            return assemblyName.Version.ToString();
         }
     }
 }
