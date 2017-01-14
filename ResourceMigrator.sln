@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceMigratorConsoleApp"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceMigrator", "ResourceMigrator\ResourceMigrator.csproj", "{719CEEE3-FF1C-4752-93CB-8CAFF0B3BA18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceMigratorXamExtension", "ResourceMigratorXamExtension\ResourceMigratorXamExtension.csproj", "{DD570568-344A-43D7-8E8F-97415A476820}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{719CEEE3-FF1C-4752-93CB-8CAFF0B3BA18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{719CEEE3-FF1C-4752-93CB-8CAFF0B3BA18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{719CEEE3-FF1C-4752-93CB-8CAFF0B3BA18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD570568-344A-43D7-8E8F-97415A476820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD570568-344A-43D7-8E8F-97415A476820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD570568-344A-43D7-8E8F-97415A476820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD570568-344A-43D7-8E8F-97415A476820}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
