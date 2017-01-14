@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Reflection;
 using Microsoft.Build.Construction;
@@ -93,6 +94,7 @@ namespace ResourceMigrator
         ///     Gets the version for the Class Library's assembly.
         /// </summary>
         /// <returns>The assembly version as a string</returns>
+        [Pure]
         public static string GetAssemblyVersion()
         {
             var assembly = typeof(ResourceMigrator).GetTypeInfo().Assembly;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -46,7 +47,7 @@ namespace ResourceMigrator
 
             // Put translations in their appropriate directories (e.g. '/values-es/strings.xml')
             var valuesDir = "values/";
-            if ((resourceType == ResourceType.String) && !inputFileName.Equals("strings"))
+            if (resourceType == ResourceType.String && !inputFileName.Equals("strings"))
             {
                 valuesDir = $"values-{inputFileName}/";
             }
@@ -63,6 +64,7 @@ namespace ResourceMigrator
         /// <param name="resourceType"></param>
         /// <param name="strings"></param>
         /// <returns></returns>
+        [Pure]
         public static string GetXmlContent(ResourceType resourceType, IDictionary<string, string> strings)
         {
             var units = string.Empty;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Construction;
@@ -15,6 +16,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="directory">The directory in which to search</param>
         /// <returns>Returns an enumerable collection of their locations.</returns>
+        [Pure]
         public static List<string> GetResxFilesInDir(string directory)
         {
             return Directory.GetFiles(directory, "*.resx", SearchOption.AllDirectories).ToList();
@@ -26,6 +28,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="pcls">The list of PCLs to process (doesn't really have to be PCLs)</param>
         /// <returns>A list of file locations to all the resx files across all the PCLs</returns>
+        [Pure]
         public static List<string> GetResxFilesForPcls(List<ProjectInSolution> pcls)
         {
             var resourceFiles = new List<string>();
@@ -44,6 +47,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="solutionPath"></param>
         /// <returns>The path to the solution file</returns>
+        [Pure]
         public static string FindSolutionFileInDir(string solutionPath)
         {
             var files = Directory.GetFiles(solutionPath, "*.sln");

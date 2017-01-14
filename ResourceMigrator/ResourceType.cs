@@ -1,4 +1,7 @@
-﻿namespace ResourceMigrator
+﻿using System.Diagnostics.Contracts;
+
+
+namespace ResourceMigrator
 {
     public enum ResourceType
     {
@@ -21,6 +24,7 @@
         /// <param name="type"></param>
         /// <param name="proj">The project type (Really only useful for iOS)</param>
         /// <returns>A string containing the type's C# keyword</returns>
+        [Pure]
         public static string StaticType(this ResourceType type, ProjectType proj = ProjectType.Unknown)
         {
             switch (type)
@@ -55,6 +59,7 @@
         /// </summary>
         /// <param name="type">The ResourceType in question</param>
         /// <returns>A string containing the Android XML tag for the resource</returns>
+        [Pure]
         public static string AndroidXmlType(this ResourceType type)
         {
             switch (type)

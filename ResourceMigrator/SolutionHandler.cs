@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using Microsoft.Build.Construction;
@@ -15,6 +16,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="pathToSolutionFile"></param>
         /// <returns></returns>
+        [Pure]
         public static List<ProjectInSolution> GetProjectsForSolution(string pathToSolutionFile)
         {
             var solution = SolutionFile.Parse(pathToSolutionFile);
@@ -27,6 +29,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="projects"></param>
         /// <returns>A new list of projects for which none match the blacklist.</returns>
+        [Pure]
         public static List<ProjectInSolution> FilterBlacklistedProjects(List<ProjectInSolution> projects)
         {
             return projects.Where(
@@ -42,6 +45,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="projects">The list of Solution Projects to sort</param>
         /// <returns>A Dictionary mapping project type to lists of matching projects</returns>
+        [Pure]
         public static Dictionary<ProjectType, List<ProjectInSolution>> CategorizeProjects(
             List<ProjectInSolution> projects
         )
@@ -70,6 +74,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="doc">The document for the csproj file</param>
         /// <returns>The project type -- possibly unknown</returns>
+        [Pure]
         public static ProjectType CategorizeProjectXml(XmlDocument doc)
         {
             // Find the 'Import' tag, and get its 'Project' value
@@ -114,6 +119,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="path">The path to the .csproj file.</param>
         /// <returns>XmlDocument object made from the csproj file.</returns>
+        [Pure]
         public static XmlDocument GetProjectXml(string path)
         {
             // Load the project as XML

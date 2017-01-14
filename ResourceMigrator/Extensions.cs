@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -16,6 +17,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="input"></param>
         /// <returns>Escaped representation of the string</returns>
+        [Pure]
         public static string EscapeString(this string input)
         {
             // Iterate through the string character by character looking for characters that need to be escaped. 
@@ -85,6 +87,7 @@ namespace ResourceMigrator
         }
 
 
+        [Pure]
         public static string EscapeForXml(this string value)
         {
             var output = new StringBuilder();
@@ -128,6 +131,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
+        [Pure]
         public static Dictionary<string, string> LoadResources(this FileSystemInfo file)
         {
             // Should never be hit, but you never know...
@@ -175,6 +179,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
+        [Pure]
         public static ResourceType GetResourceType(this FileSystemInfo fileName)
         {
             switch (fileName.Name.ToLower().Substring(0, Math.Min(3, fileName.Name.Length)))
@@ -205,6 +210,7 @@ namespace ResourceMigrator
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
+        [Pure]
         public static string ContainingDirectory(this ProjectInSolution project)
         {
             var index = project.AbsolutePath.LastIndexOfAny(new[] {'/', '\\'});

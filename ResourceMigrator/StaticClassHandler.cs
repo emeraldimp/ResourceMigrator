@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Text;
 using Config = ResourceMigrator.MigratorConfiguration;
@@ -17,6 +18,7 @@ namespace ResourceMigrator
         /// <param name="keyValues">A dictionary of variable names to variable values</param>
         /// <param name="entryType">The data type for the entries (E.g. bool, string, int) </param>
         /// <returns></returns>
+        [Pure]
         public static string GenerateStaticClassContent(IDictionary<string, string> keyValues, string entryType)
         {
             var builder = new StringBuilder();
@@ -42,6 +44,7 @@ namespace ResourceMigrator
         /// <param name="className">The name of the class</param>
         /// <param name="contents">The contents of the class (must be static)</param>
         /// <returns>A string containing the complete class content</returns>
+        [Pure]
         public static string GenerateStaticClass(string nameSpace, string className, string contents)
         {
             var builder = new StringBuilder();
