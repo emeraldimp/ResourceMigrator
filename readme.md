@@ -1,7 +1,7 @@
 ##Overview
 Cross platform way to migrate PCL Resources over to Android and iOS. Mapleton Hill provides no guarantee of further development of this code. Be aware that this project is still under development. 
 
-This project will automatically generate `*.xml` resource files for Android, and static classes for iOS bool, dimen, integer, color, string resources.
+This project will automatically generate `*.xml` resource files for Android, and static classes for iOS bool, dimen, integer, color resources. iOS string resources will go into their own .strings files tucked away in the appropriate lproj subdirectories.
 
 ##Repository Contents
 The project contains a Visual Studio C# Solution containing three projects:
@@ -34,10 +34,10 @@ An easy way to integrate this tool with your VisualStudio project is to place th
 
     $(SolutionDir)ResourceMigrator.exe $(SolutionDir)
 
- Additionally, if you don't supply a path to the Solution, ResourceMigrator will assume it's in the Solution root, and go from there.
+ Additionally, if you don't supply a path to the Solution, ResourceMigrator will assume it's in the Solution root, and go from there. This way, simply double-clicking the executible will run the migrator. 
 
 ##Issues
  - Doesn't automatically update csproj to include new resources
  - Doesn't handle multiple resources from different PCLs under the same name (PCL_1.bools isn't combined with PCL_2.bools) 
-
+ - Visual Studio Plugin gives zero feedback that it's doing/done anything. 
 
