@@ -213,8 +213,15 @@ namespace ResourceMigrator
         [Pure]
         public static string ContainingDirectory(this ProjectInSolution project)
         {
-            var index = project.AbsolutePath.LastIndexOfAny(new[] {'/', '\\'});
-            return project.AbsolutePath.Substring(0, index + 1);
+            var path = project.AbsolutePath;
+            var index = path.LastIndexOfAny(new[] {'/', '\\'});
+
+            if (Path.DirectorySeparatorChar == '/')
+            {
+                path = path.Replace('\\', '/');
+            }
+
+            return path.Substring(0, index + 1);
         }
     }
 }
